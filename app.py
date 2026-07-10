@@ -60,14 +60,14 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
-
-# 3. دالة كاش لتحميل البيانات والموديل من السيرفر السريع المفتوح
 @st.cache_resource
 def init_smart_bot():
-    # رابط سحابي سريع ومستقر ومفتوح على سيرفرات Hugging Face للـ 200 ألف سطر كاملة
-    # رابط مباشر ومفتوح للجميع لا يحتاج تصاريح
-    data_url = "https://docs.google.com/uc?export=download&id=1_vU0w8qX1kR0XoW0q6vOqP6-oX5S5b6_"
-    df = pd.read_csv(data_url)
+    # الرابط الجديد المباشر لملف الـ TXT الخاص بكِ
+    data_url = "https://huggingface.co/datasets/Heba26/chatbot/resolve/5bfc2260c029f3e8328616cdd37e4ec94da00de6/QA_final_output.txt"
+    
+    # قراءة الملف (بما أنه TXT، قد نحتاج لتحديد الفاصل، إذا كان ملفكِ مفصولاً بفواصل، اتركيها كما هي)
+    # إذا ظهر خطأ، سنقوم بتعديل هذا السطر لاحقاً
+    df = pd.read_csv(data_url, sep=',') 
     
     df['final_question'] = df['final_question'].fillna('')
     df['final_answer'] = df['final_answer'].fillna('')
