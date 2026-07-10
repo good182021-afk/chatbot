@@ -62,19 +62,15 @@ st.markdown("""
 """, unsafe_allow_html=True)
 @st.cache_resource
 def init_smart_bot():
-    # الرابط الجديد المباشر لملف الـ TXT الخاص بكِ
     data_url = "https://huggingface.co/datasets/Heba26/chatbot/resolve/5bfc2260c029f3e8328616cdd37e4ec94da00de6/QA_final_output.txt"
     
-    # قراءة الملف (بما أنه TXT، قد نحتاج لتحديد الفاصل، إذا كان ملفكِ مفصولاً بفواصل، اتركيها كما هي)
-    # إذا ظهر خطأ، سنقوم بتعديل هذا السطر لاحقاً
-    df = pd.read_csv(data_url, sep=',') 
+    # محاولة قراءة الملف، وإذا لم تكن الفاصلة هي الفاصلة، سيقرأه كسطر واحد
+    df = pd.read_csv(data_url, sep='\t') # جربي sep='\t' (للـ Tab) أو sep=',' (للـ Comma)
     
-    df['final_question'] = df['final_question'].fillna('')
-    df['final_answer'] = df['final_answer'].fillna('')
+    # طباعة أسماء الأعمدة في نافذة الخطأ لكي نعرف ماذا يقرأ الكود
+    st.error(f"الأعمدة الموجودة هي: {list(df.columns)}") 
     
-    vectorizer = TfidfVectorizer(ngram_range=(1, 2))
-    tfidf_matrix = vectorizer.fit_transform(df['final_question'])
-    return df, vectorizer, tfidf_matrix
+    return df, None, None
 
 try:
     df, vectorizer, tfidf_matrix = init_smart_bot()
