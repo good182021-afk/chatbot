@@ -3,13 +3,13 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-st.set_page_config(page_title="إسألني", page_icon="🤖")
+st.title("🤖 إسألني")
 
+# تحميل البيانات
 @st.cache_resource
-def init_smart_bot():
-    # الرابط المباشر
+def load_data():
     data_url = "https://huggingface.co/datasets/Heba26/chatbot/resolve/main/QA_final_output.txt"
-    # قراءة الملف
+    # قراءة البيانات مع التأكد من الفاصل
     df = pd.read_csv(data_url, sep='\t', header=None, names=['final_question', 'final_answer'])
     df = df.fillna('')
     vectorizer = TfidfVectorizer(ngram_range=(1, 2))
@@ -17,9 +17,7 @@ def init_smart_bot():
     return df, vectorizer, tfidf_matrix
 
 try:
-    df, vectorizer, tfidf_matrix = init_smart_bot()
-    
-    st.title("🤖 إسألني")
+    df, vectorizer, tfidf_matrix = load_data()
     
     user_input = st.text_input("اكتبي سؤالك هنا:")
     
@@ -29,13 +27,13 @@ try:
         best_match_idx = similarity_scores.argmax()
         
         if similarity_scores[0, best_match_idx] > 0.1:
-            st.subheader("الرد الشرعي:")
+            st.write("### الرد الشرعي:")
             st.write(df.iloc[best_match_idx]['final_answer'])
         else:
-            st.write("عذراً، ليس لدي إجابه.")
+            st.write("عذراا،،ليس لدي إجابة")
             
-    st.markdown("---")
-    st.write("إعداد: هبة & فاطمة | إشراف: د. صلاح | معهد التخطيط")
-
 except Exception as e:
-    st.error(f"حدث خطأ في تحميل التطبيق: {e}")
+    st.write(f"خطأ في التحميل: {e}")
+
+st.markdown("---")
+st.write("إعداد: هبة & فاطمة | إشراف: د. صلاح")
