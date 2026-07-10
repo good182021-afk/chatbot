@@ -65,7 +65,8 @@ st.markdown("""
 @st.cache_resource
 def init_smart_bot():
     # رابط سحابي سريع ومستقر ومفتوح على سيرفرات Hugging Face للـ 200 ألف سطر كاملة
-    data_url = "https://huggingface.co/datasets/AishaLibya/islamic_dataset/resolve/main/nlp_final_processed.csv"
+    # رابط مباشر ومفتوح للجميع لا يحتاج تصاريح
+    data_url = "https://docs.google.com/uc?export=download&id=1_vU0w8qX1kR0XoW0q6vOqP6-oX5S5b6_"
     df = pd.read_csv(data_url)
     
     df['final_question'] = df['final_question'].fillna('')
