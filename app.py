@@ -27,7 +27,7 @@ try:
         best_match_idx = similarity_scores.argmax()
         
         if similarity_scores[0, best_match_idx] > 0.1:
-            st.write("### الرد الشرعي:")
+            st.write("### الرد :")
             st.write(df.iloc[best_match_idx]['final_answer'])
         else:
             st.write("عذراا،،ليس لدي إجابة")
