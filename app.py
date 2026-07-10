@@ -64,13 +64,16 @@ st.markdown("""
 def init_smart_bot():
     data_url = "https://huggingface.co/datasets/Heba26/chatbot/resolve/5bfc2260c029f3e8328616cdd37e4ec94da00de6/QA_final_output.txt"
     
-    # محاولة قراءة الملف، وإذا لم تكن الفاصلة هي الفاصلة، سيقرأه كسطر واحد
-    df = pd.read_csv(data_url, sep='\t') # جربي sep='\t' (للـ Tab) أو sep=',' (للـ Comma)
+    # قراءة الملف بدون اعتبار السطر الأول كعنوان (header=None)
+    # ثم إعطاؤه أسماء أعمدة ثابتة
+    df = pd.read_csv(data_url, sep='\t', header=None, names=['final_question', 'final_answer'])
     
-    # طباعة أسماء الأعمدة في نافذة الخطأ لكي نعرف ماذا يقرأ الكود
-    st.error(f"الأعمدة الموجودة هي: {list(df.columns)}") 
+    df['final_question'] = df['final_question'].fillna('')
+    df['final_answer'] = df['final_answer'].fillna('')
     
-    return df, None, None
+    vectorizer = TfidfVectorizer(ngram_range=(1, 2))
+    tfidf_matrix = vectorizer.fit_transform(df['final_question'])
+    return df, vectorizer, tfidf_matrix
 
 try:
     df, vectorizer, tfidf_matrix = init_smart_bot()
