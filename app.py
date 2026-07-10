@@ -62,18 +62,14 @@ st.markdown("""
 """, unsafe_allow_html=True)
 @st.cache_resource
 def init_smart_bot():
-    data_url = "https://huggingface.co/datasets/Heba26/chatbot/resolve/5bfc2260c029f3e8328616cdd37e4ec94da00de6/QA_final_output.txt"
+    data_url = "https://huggingface.co/datasets/Heba26/chatbot/resolve/main/nlp_final_processed.csv"
+    df = pd.read_csv(data_url)
     
-    # قراءة الملف بدون اعتبار السطر الأول كعنوان (header=None)
-    # ثم إعطاؤه أسماء أعمدة ثابتة
-    df = pd.read_csv(data_url, sep='\t', header=None, names=['final_question', 'final_answer'])
+    # هذا السطر سيظهر لكِ أسماء الأعمدة على واجهة الموقع
+    st.error(f"أسماء الأعمدة الموجودة في ملفك هي: {list(df.columns)}")
+    st.stop() # هذا سيوقف الكود فوراً لتري الرسالة
     
-    df['final_question'] = df['final_question'].fillna('')
-    df['final_answer'] = df['final_answer'].fillna('')
-    
-    vectorizer = TfidfVectorizer(ngram_range=(1, 2))
-    tfidf_matrix = vectorizer.fit_transform(df['final_question'])
-    return df, vectorizer, tfidf_matrix
+    return df, None, None
 
 try:
     df, vectorizer, tfidf_matrix = init_smart_bot()
